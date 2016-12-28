@@ -17,6 +17,8 @@ measureIt(){
 */
 
 var calcMatrix = require('calc-matrix');
+var isReady = false;
+var forEach = Array.prototype.forEach;
 
 function setMeasureable(el) {
   el.style.display = 'block';
@@ -25,13 +27,9 @@ function setMeasureable(el) {
   el.style.zIndex = -10;
 }
 
-function setDefault(el,obj) {
-  var key;
-  for (var key in obj) {
-    if (obj.hasOwnProperty(key)) {
-      el.style[key]=obj[key];
-    }
-  }
+function setDefault(el,cssText) {
+  el.removeAttribute(el,'style');
+  el.style.cssText = cssText;
 }
 
 function getTransfromString(inElement) {
@@ -40,29 +38,46 @@ function getTransfromString(inElement) {
 }
 
 
+function listenImgsLoad(inElement,inCallback){
+  var images = inElement.querySelectorAll('img');
+  var counter = 0;
 
-module.exports = function(inElement){
-  var style = inElement.style;
-  var _display = style.display;
-  var _visibility = style.visibility;
-  var _position = style.position;
-  var _zIndex = style.zIndex;
-  var _martrix;
-  var _bound = null;
+  function _imageLoad(){
+    counter++;
+    if (counter == images.length) {
+      inCallback.call();
+    }
+  }
 
-  setMeasureable(inElement);
-  _martrix = calcMatrix( getTransfromString (inElement));
-  _bound=inElement.getBoundingClientRect();
+  function _iterator(image) {
+    image.addEventListener('load', _imageLoad, false);
+  }
 
-  setDefault(inElement,{
-    display:_display,
-    visibility:_visibility,
-    position:_position,
-    zIndex:_zIndex,
-  });
+  forEach.call(images, _iterator);
+}
 
-  return {
+function imageReady(inElement,inDefaultStyle,inCallback) {
+  var _martrix = calcMatrix( getTransfromString (inElement));
+  var _bound=inElement.getBoundingClientRect();
+  setDefault(inElement,inDefaultStyle);
+  inCallback.call(null,{
     width:_bound.width / _martrix.scaleX,
     height:_bound.height / _martrix.scaleY
+  });
+}
+
+
+module.exports = function(inElement,inCallback){
+  var style = inElement.style;
+  var _defaultStyle = style.cssText;
+
+  setMeasureable(inElement);
+  if(!isReady){
+    listenImgsLoad(inElement,function(){
+      isReady = true;
+      imageReady(inElement,_defaultStyle,inCallback);
+    });
+  }else{
+    imageReady(inElement,_defaultStyle,inCallback);
   }
 };
