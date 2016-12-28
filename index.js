@@ -34,21 +34,24 @@ function setDefault(el,obj) {
   }
 }
 
+function getTransfromString(inElement) {
+  var computedStyle = getComputedStyle(inElement);
+  return computedStyle.transform || computedStyle.webkitTransform || computedStyle.mozTransform;
+}
+
 
 
 module.exports = function(inElement){
   var style = inElement.style;
-  var computedStyle = getComputedStyle(inElement);
   var _display = style.display;
   var _visibility = style.visibility;
   var _position = style.position;
   var _zIndex = style.zIndex;
-  var _transform = computedStyle.transform || computedStyle.webkitTransform || computedStyle.mozTransform;
-  var _martrix = calcMatrix(_transform);
+  var _martrix;
   var _bound = null;
 
   setMeasureable(inElement);
-
+  _martrix = calcMatrix( getTransfromString (inElement));
   _bound=inElement.getBoundingClientRect();
 
   setDefault(inElement,{
