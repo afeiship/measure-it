@@ -53,7 +53,11 @@ function listenImgsLoad(inElement,inCallback){
     image.addEventListener('load', _imageLoad, false);
   }
 
-  forEach.call(images, _iterator);
+  if(images.length>0){
+    forEach.call(images, _iterator);
+  }else{
+    inCallback.call();
+  }
 }
 
 function imageReady(inElement,inDefaultStyle,inCallback) {
