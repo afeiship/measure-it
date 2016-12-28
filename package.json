@@ -1,0 +1,12 @@
+{
+  "name": "measure-it",
+  "version": "1.0.0",
+  "description": "Measure element size no matter it is been hidden or transform.",
+  "main": "index.js",
+  "repository": "git@github.com:afeiship/measure-it.git",
+  "author": "feizheng <1290657123@qq.com>",
+  "license": "MIT",
+  "dependencies": {
+    "calc-martix": "github:afeiship/calc-martix"
+  }
+}
