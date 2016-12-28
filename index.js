@@ -22,7 +22,7 @@ function setMeasureable(el) {
   el.style.display = 'block';
   el.style.visibility = 'hidden';
   el.style.position = 'absolute';
-  el.style.zIndex = -1;
+  el.style.zIndex = -10;
 }
 
 function setDefault(el,obj) {
@@ -37,10 +37,12 @@ function setDefault(el,obj) {
 
 
 module.exports = function(inElement){
-  var _display = inElement.style.display;
-  var _visibility = inElement.style.visibility;
-  var _position = inElement.style.position;
-  var _zIndex = inElement.style.zIndex;
+  var style = inElement.style;
+  var _display = style.display;
+  var _visibility = style.visibility;
+  var _position = style.position;
+  var _zIndex = style.zIndex;
+  var _transform = style.transform || style.webkitTransform || style.mozTransform;
   var _martrix = calcMatrix(getComputedStyle(inElement));
   var _bound = null;
 
