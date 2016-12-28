@@ -46,7 +46,7 @@ module.exports = function(inElement){
 
   setMeasureable(inElement);
 
-  _bound=getBoundingClientRect(inElement);
+  _bound=inElement.getBoundingClientRect();
 
   setDefault(inElement,{
     display:_display,
